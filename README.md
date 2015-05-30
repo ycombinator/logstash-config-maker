@@ -11,15 +11,23 @@ In the future, the UI will also allow users to test their config files online.
 
 ### Let's go!
 
+0. Open a Terminal window
+
 1. Clone this repo
 
-    git clone .../logstash-config-maker.git
-    cd logstash-config-maker
+   ```
+   git clone .../logstash-config-maker.git
+   cd logstash-config-maker
+   ```
 
 2. Install dependencies
 
-    bower Install
+   ```
+   bower Install
+   ```
 
 3. Load up the UI in your browser
 
-    open index.html
+   ```
+   open index.html
+   ```
