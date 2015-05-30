@@ -23,7 +23,7 @@ In the future, the UI will also allow users to test their config files online.
 2. Install dependencies
 
    ```
-   bower Install
+   bower install
    ```
 
 3. Load up the UI in your browser
