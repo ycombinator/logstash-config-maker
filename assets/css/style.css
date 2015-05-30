@@ -18,13 +18,8 @@
 
 #view #config .plugin > a {
   visibility: hidden;
-  text-decoration: none;
 }
 
 #view #config .plugin:hover > a {
   visibility: visible;
-}
-
-#credits {
-  font-size: 0.75em;
 }

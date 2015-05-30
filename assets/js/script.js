@@ -46,13 +46,12 @@ var Plugin = function(plugin) {
       .text(plugin.name + " {\n" + "}\n");
 
     // Add 'x' to delete plugin
-    var pluginDeleteImgEl = $("<img>")
-      .attr("src", "assets/images/trash.png")
-      .attr("width", "16px")
-      .attr("height", "16px");
+    var pluginIconEl = $("<span>")
+      .addClass("glyphicon")
+      .addClass("glyphicon-trash");
     var pluginDeleteEl = $("<a>")
       .attr("href", "#delete-" + plugin.type + "-plugin")
-      .append(pluginDeleteImgEl);
+      .append(pluginIconEl);
     pluginEl.append(pluginDeleteEl);
     pluginDeleteEl.click(function(e) {
       pluginEl.remove();
