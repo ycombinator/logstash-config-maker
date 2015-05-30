@@ -1,0 +1,27 @@
+{
+  "name": "logstash-config-maker",
+  "version": "0.0.1",
+  "authors": [
+    "Shaunak Kashyap <ycombinator@gmail.com>"
+  ],
+  "description": "Logstash Config Maker",
+  "main": "index.html",
+  "keywords": [
+    "logstash",
+    "config",
+    "elk"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.4",
+    "jquery-ui": "~1.11.4",
+    "jquery": "~2.1.4"
+  }
+}
