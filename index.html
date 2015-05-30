@@ -1,0 +1,84 @@
+<html>
+<head>
+  <title>Logstash Config Maker</title>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="assets/js/script.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"><h2>Build</h2></div>
+    <div class="col-md-4"><h2>View</h2></div>
+    <div class="col-md-4"><h2>Test</h2></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="panel-group" id="accordion" role="tablist">
+        <!-- Input plugins -->
+        <div class="panel panel-default">
+          <div class="panel-heading" id="input-plugins-heading" role="tab">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#input-plugins">Input plugins</a>
+            </h4>
+          </div>
+          <div id="input-plugins" class="panel-collapse collapse in" role="tabpanel">
+            <div class="panel-body"></div>
+          </div>
+        </div>
+        <!-- Filter plugins -->
+        <div class="panel panel-default">
+          <div class="panel-heading" id="filter-plugins-heading" role="tab">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#filter-plugins">Filter plugins</a>
+            </h4>
+          </div>
+          <div id="filter-plugins" class="panel-collapse collapse" role="tabpanel">
+            <div class="panel-body"></div>
+          </div>
+        </div>
+        <!-- Output plugins -->
+        <div class="panel panel-default">
+          <div class="panel-heading" id="output-plugins-heading" role="tab">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#output-plugins">Output plugins</a>
+            </h4>
+          </div>
+          <div id="output-plugins" class="panel-collapse collapse" role="tabpanel">
+            <div class="panel-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4" id="view">
+      <div id="config">
+        <div id="input" class="plugin-type">input {
+          <ol class="plugin-list"></ol>
+        }
+        </div>
+        <div id="filter" class="plugin-type">filter {
+          <ol class="plugin-list"></ol>
+        }
+        </div>
+        <div id="output" class="plugin-type">output {
+          <ol class="plugin-list"></ol>
+        }
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">TODO</div>
+  </div>
+</div>
+<div class="container">
+  <div class="row" id="credits">
+    <div class="col-md-12">
+      <p class="text-center">Icons made by <a href="http://www.flaticon.com/authors/egor-rumyantsev" title="Egor Rumyantsev">Egor Rumyantsev</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
