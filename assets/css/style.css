@@ -4,6 +4,7 @@
 
 #view #config .plugin-type {
   margin-bottom: 1.5em;
+  display: none;
 }
 
 #view #config .plugin-list {
