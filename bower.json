@@ -20,7 +20,7 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.4",
+    "bootstrap-theme-supervillain": "~0.0.3",
     "jquery-ui": "~1.11.4",
     "jquery": "~2.1.4"
   }
