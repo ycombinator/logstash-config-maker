@@ -269,7 +269,7 @@ var PluginSet = function() {
   self.getPlugin = function(type, name, cb) {
     var plugins = JSON.parse(window.sessionStorage.getItem('ls_plugins'));
     var plugin = plugins.unsorted[type][name];
-    if (!plugin.description) {
+    if (!(plugin.description || plugin.attributes)) {
       fetchPluginFileFromGitHub(type, name, function(fileContents) {
         var pluginDetails = parsePluginFile(fileContents);
         plugin.description = pluginDetails.description;
