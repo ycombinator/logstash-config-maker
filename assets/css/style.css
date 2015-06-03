@@ -4,8 +4,8 @@
 
 #header .glyphicon {
   font-size: 1.25em;
-  padding-top: 1.5em;
-  padding-left: 0.5em;
+  margin-top: 1.5em;
+  margin-left: 0.5em;
 }
 
 #view #config {
