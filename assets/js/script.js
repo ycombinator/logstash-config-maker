@@ -78,7 +78,7 @@ var Plugin = function(pluginDetails) {
           .append(labelEl)
           .append(document.createTextNode(" => "))
           .append(inputEl)
-          .tooltip({ title: attribute.description, placement: "auto bottom" })
+          .tooltip({ title: attribute.description, placement: "bottom" })
           .hover(function(e) {
             $(e.target).tooltip("show");
           });
