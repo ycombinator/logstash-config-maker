@@ -224,7 +224,6 @@ var PluginSet = function() {
         description = descriptionParagraphs[0];
         comments = [];
       } else if (matches = line.match(CLEAR_COMMENT_RE)) {
-        console.log("** Clearing comments **");
         comments = [];
       }
     });
