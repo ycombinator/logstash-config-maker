@@ -287,11 +287,44 @@ var PluginSet = function() {
 
 }
 
+// "Main"
 $(function() {
   var pluginSet = new PluginSet();
   pluginSet.init(function() {
     var config = new Config(pluginSet);
     config.renderBuildHtml();
     config.renderViewHtml();
+
+    var tour = new Tour({
+      steps: [
+        {
+          element: "#available-plugins h2",
+          title: "Step 1",
+          content: "Start by browsing through the set of"
+            + " available Logstash plugins below. When you see one"
+            + " you like, just click on it to add it to the"
+            + " configuration file."
+        },
+        {
+          element: "#view .tour-anchor",
+          title: "Step 2",
+          content: "When you click on a plugin you like, it will be"
+            + " added here, along with its configuration options.<br /><br />"
+            + " <em>Tip: You can change the order of plugins by"
+            + " dragging them up or down.</em>"
+        },
+        {
+          element: "#download-config",
+          title: "Step 3",
+          content: "When you are done building your Logstash configuration file,"
+            + " click this button to download it so you can run it with:<br /><br />"
+            + " <pre>logstash --config /path/to/downloaded/file</pre>"
+        }
+      ]
+    });
+    tour.init();
+    tour.start();
+
   });
+
 });
