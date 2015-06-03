@@ -4,6 +4,7 @@ var Config = function(pluginSet) {
 
   var download = function() {
     // TODO: code to produce downlad-able config
+    return false;
   }
 
   self.renderBuildHtml = function() {
