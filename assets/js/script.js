@@ -128,8 +128,10 @@ var PluginSet = function() {
 
   var pluginRepoNameRegexp = /logstash-(input|filter|output|codec)-(\w+)/;
   var fetchPluginsFromGitHub = function(plugins, page, cb) {
+    var url = "http://api.github.com/orgs/logstash-plugins/repos?page=" + page;
+    console.log("Fetching " + url + "...");
     $.ajax({
-      url: "http://api.github.com/orgs/logstash-plugins/repos?page=" + page
+      url: url
     }).then(function(data, status, xhr) {
       if (data.length > 0) {
         data.forEach(function(repo) {
@@ -156,6 +158,7 @@ var PluginSet = function() {
     var fileUrl = "https://api.github.com/repos/logstash-plugins/"
       + "logstash-" + type + "-" + name + "/"
       + "contents/lib/logstash/" + type + "s/" + name + ".rb"
+    console.log("Fetching " + fileUrl + "...");
     $.ajax({
       url: fileUrl
     }).then(function(data, status, xhr) {
