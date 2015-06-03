@@ -65,7 +65,8 @@ var Plugin = function(pluginDetails) {
     for (attributeName in pluginDetails.attributes) {
       var attribute = pluginDetails.attributes[attributeName];
 
-      if (attribute.required || !attribute.default) {
+      if (!attribute.deprecated
+        && (attribute.required || !attribute.default)) {
 
         var labelEl = $("<label>")
           .text(attributeName);
@@ -197,12 +198,19 @@ var PluginSet = function() {
           item = item.trim();
           var itemMatches = item.match(/:([^= ]+) *=> *(:?(.*))/);
           if (itemMatches) {
-            if (itemMatches[1] === 'validate') {
-              attributes[name].dataType = itemMatches[3];
-            } else if (itemMatches[1] === 'default') {
-              attributes[name].default = itemMatches[2];
-            } else if (itemMatches[1] === 'required') {
-              attributes[name].required = (itemMatches[2] == "true");
+            switch (itemMatches[1]) {
+              case 'validate':
+                attributes[name].dataType = itemMatches[3];
+                break;
+              case 'default':
+                attributes[name].default = itemMatches[2];
+                break;
+              case 'required':
+                attributes[name].required = (itemMatches[2] == "true");
+                break;
+              case 'deprecated':
+                attributes[name].deprecated = (itemMatches[2] == "true");
+                break;
             }
           }
         });
