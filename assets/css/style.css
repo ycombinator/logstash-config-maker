@@ -18,6 +18,10 @@
   display: none;
 }
 
+#view #config .plugin {
+  margin-top: 0.4em;
+}
+
 #view #config ol,ul {
   margin-bottom: 0em;
   padding-left: 1em;
