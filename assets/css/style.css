@@ -42,3 +42,11 @@
 #view #config label {
   font-weight: normal;
 }
+
+.tour-tour {
+  color: #2a333c;
+}
+
+.tour-anchor {
+  width: 25%
+}
