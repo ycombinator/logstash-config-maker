@@ -64,9 +64,7 @@ var Plugin = function(pluginDetails) {
     for (attributeName in pluginDetails.attributes) {
       var attribute = pluginDetails.attributes[attributeName];
 
-      if (!attribute.default) {
-
-        attribute.description = "foobar";
+      if (attribute.required || !attribute.default) {
 
         var labelEl = $("<label>")
           .text(attributeName);
@@ -202,6 +200,8 @@ var PluginSet = function() {
               attributes[name].dataType = itemMatches[3];
             } else if (itemMatches[1] === 'default') {
               attributes[name].default = itemMatches[2];
+            } else if (itemMatches[1] === 'required') {
+              attributes[name].required = (itemMatches[2] == "true");
             }
           }
         });
