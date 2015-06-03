@@ -10,10 +10,15 @@
 </head>
 <body>
 <div class="container">
-  <div class="row">
+  <div class="row" id="header">
     <div class="col-md-4"><h2>Build</h2></div>
-    <div class="col-md-4"><h2>View</h2></div>
-    <div class="col-md-4"><h2>Test</h2></div>
+    <div class="col-md-5">
+      <h2>View</h2>
+      <a id="download-config" href="#download-config">
+        <span class="glyphicon glyphicon-download" />
+      </a>
+    </div>
+    <div class="col-md-3"><h2>Test</h2></div>
   </div>
   <div class="row">
     <div class="col-md-4">
@@ -54,7 +59,7 @@
       </div>
     </div>
 
-    <div class="col-md-4" id="view">
+    <div class="col-md-5" id="view">
       <div id="config">
         <div id="input" class="plugin-type">input {
           <ol class="plugin-list"></ol>
@@ -70,7 +75,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">TODO</div>
+    <div class="col-md-3">TODO</div>
   </div>
 </div>
 </body>

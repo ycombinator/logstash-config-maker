@@ -2,6 +2,10 @@ var Config = function(pluginSet) {
 
   var self = this;
 
+  var download = function() {
+    // TODO: code to produce downlad-able config
+  }
+
   self.renderBuildHtml = function() {
     [ "input", "filter", "output" ].forEach(function(pluginType) {
       var pluginTypeLibraryEl = $( '#' + pluginType + '-plugins .panel-body' );
@@ -9,10 +13,23 @@ var Config = function(pluginSet) {
         var pluginEl = $( "<button>" ).text(pluginName).addClass("btn").addClass("btn-default");
         pluginTypeLibraryEl.append(pluginEl);
 
+        pluginEl.hover(function(e) {
+          pluginSet.getPlugin(pluginType, pluginName, function(pluginDetails) {
+            pluginEl.tooltip({
+              title: pluginDetails.description,
+              placement: "auto left"
+            });
+            pluginEl.tooltip("toggle");
+          });
+        });
+
         pluginEl.click(function(e) {
           // Add plugin to view area
-          var plugin = new Plugin(pluginSet.getPlugin(pluginType, pluginName));
-          plugin.renderViewHtml();
+          pluginSet.getPlugin(pluginType, pluginName, function(pluginDetails) {
+            console.log("Plugin details (before creating Plugin): ", pluginDetails);
+            var plugin = new Plugin(pluginDetails);
+            plugin.renderViewHtml();
+          });
         });
       });
     });
@@ -33,24 +50,58 @@ var Config = function(pluginSet) {
         }
       })
     });
+
+    $( "#download-config" ).click(download);
   }
 }
 
-var Plugin = function(plugin) {
+var Plugin = function(pluginDetails) {
   var self = this;
 
   self.renderViewHtml = function() {
 
+    var pluginAttributeListEl = $("<ul>");
+    for (attributeName in pluginDetails.attributes) {
+      var attribute = pluginDetails.attributes[attributeName];
+
+      if (!attribute.default) {
+
+        attribute.description = "foobar";
+
+        var labelEl = $("<label>")
+          .text(attributeName);
+
+        var inputEl = $("<input>")
+          .attr("type", "textbox")
+          .attr("placeholder", attribute.dataType)
+          .val(attribute.default);
+
+        var attrEl = $("<li>")
+          .append(labelEl)
+          .append(document.createTextNode(" => "))
+          .append(inputEl)
+          .tooltip({ title: attribute.description, placement: "auto bottom" })
+          .hover(function(e) {
+            $(e.target).tooltip("show");
+          });
+
+        pluginAttributeListEl.append(attrEl);
+
+      }
+    }
+
     var pluginEl = $("<li>")
       .addClass("plugin")
-      .text(plugin.name + " {\n" + "}\n");
+      .append(document.createTextNode(pluginDetails.name + " {\n"))
+      .append(pluginAttributeListEl)
+      .append(document.createTextNode("}\n"));
 
     // Add 'x' to delete plugin
     var pluginIconEl = $("<span>")
       .addClass("glyphicon")
       .addClass("glyphicon-trash");
     var pluginDeleteEl = $("<a>")
-      .attr("href", "#delete-" + plugin.type + "-plugin")
+      .attr("href", "#delete-" + pluginDetails.type + "-plugin")
       .append(pluginIconEl);
     pluginEl.append(pluginDeleteEl);
     pluginDeleteEl.click(function(e) {
@@ -58,7 +109,7 @@ var Plugin = function(plugin) {
     })
 
     // Add to list in view area
-    var pluginTypeListEl = $( "#view #config #" + plugin.type + " .plugin-list");
+    var pluginTypeListEl = $( "#view #config #" + pluginDetails.type + " .plugin-list");
     pluginTypeListEl.parent().show();
     pluginTypeListEl.append(pluginEl);
   }
@@ -101,19 +152,76 @@ var PluginSet = function() {
     });
   };
 
+  var fetchPluginFileFromGitHub = function(type, name, cb) {
+    var fileUrl = "https://api.github.com/repos/logstash-plugins/"
+      + "logstash-" + type + "-" + name + "/"
+      + "contents/lib/logstash/" + type + "s/" + name + ".rb"
+    $.ajax({
+      url: fileUrl
+    }).then(function(data, status, xhr) {
+      cb(atob(data.content));
+    });
+  }
+
   var parsePluginFile = function(fileContents) {
-  //
-  // def initialize
-  //   @rules = {
-  //     COMMENT_RE => lambda { |m| add_comment(m[1]) },
-  //     /^ *class.*< *(::)?LogStash::(Outputs|Filters|Inputs|Codecs)::(Base|Threadable)/ => \
-  //       lambda { |m| set_class_description },
-  //     /^ *config +[^=].*/ => lambda { |m| add_config(m[0]) },
-  //     /^ *milestone .*/ => lambda { |m| set_milestone(m[0]) },
-  //     /^ *config_name .*/ => lambda { |m| set_config_name(m[0]) },
-  //     /^ *flag[( ].*/ => lambda { |m| add_flag(m[0]) },
-  //     /^ *(class|def|module) / => lambda { |m| clear_comments },
-  //   }
+    // Based on https://github.com/elastic/logstash/blob/master/docs/asciidocgen.rb#L18-L30
+
+    var comments = [];
+
+    var description = "";
+    var attributes = {};
+
+    var COMMENT_RE     = /^ *#(?: (.*)| *$)/,
+      CLASS_DEF_RE     = /^ *class.*< *(::)?LogStash::(Outputs|Filters|Inputs|Codecs)::(Base|Threadable)/,
+      CONFIG_RE        = /^ *config :+([^,]+),(.*)/, // modified from original!
+      CONFIG_NAME_RE   = /^ *config_name .*/,
+      MILESTONE_RE     = /^ *milestone .*/,
+      FLAG_RE          = /^ *flag[( ].*/,
+      CLEAR_COMMENT_RE = /^ *(class|def|module) /;
+
+    fileContents.split("\n").forEach(function(line) {
+      var matches;
+      if ((matches = line.match(COMMENT_RE))) {
+        var comment = matches[1];
+        if (comment != "encoding: utf-8") {
+          comments.push(matches[1]);
+        }
+      } else if (matches = line.match(CONFIG_RE)) {
+        var name = matches[1];
+        var rest = matches[2];
+        attributes[name] = {
+          dataType: null,
+          default: null,
+          description: comments.join("\n")
+        };
+        rest.split(",").forEach(function(item) {
+          item = item.trim();
+          var itemMatches = item.match(/:([^= ]+) *=> *(:?(.*))/);
+          if (itemMatches) {
+            if (itemMatches[1] === 'validate') {
+              attributes[name].dataType = itemMatches[3];
+            } else if (itemMatches[1] === 'default') {
+              attributes[name].default = itemMatches[2];
+            }
+          }
+        });
+        comments = [];
+      } else if (matches = line.match(CLASS_DEF_RE)) {
+        var descriptionComplete = comments.join("\n");
+        var descriptionParagraphs = descriptionComplete.split(/\n\n/);
+        description = descriptionParagraphs[0];
+        comments = [];
+      } else if (matches = line.match(CLEAR_COMMENT_RE)) {
+        console.log("** Clearing comments **");
+        comments = [];
+      }
+    });
+
+    return {
+      description: description,
+      attributes: attributes
+    };
+
   }
 
   self.init = function(cb) {
@@ -147,9 +255,23 @@ var PluginSet = function() {
     return plugins.sorted[type];
   }
 
-  self.getPlugin = function(type, name) {
+  self.getPlugin = function(type, name, cb) {
     var plugins = JSON.parse(window.sessionStorage.getItem('ls_plugins'));
-    return plugins.unsorted[type][name];
+    var plugin = plugins.unsorted[type][name];
+    if (!plugin.description) {
+      fetchPluginFileFromGitHub(type, name, function(fileContents) {
+        var pluginDetails = parsePluginFile(fileContents);
+        plugin.description = pluginDetails.description;
+        plugin.attributes = pluginDetails.attributes;
+
+        plugins.unsorted[type][name] = plugin;
+        window.sessionStorage.setItem('ls_plugins', JSON.stringify(plugins));
+
+        cb(plugin);
+      });
+    } else {
+      cb(plugin);
+    }
   }
 
 }

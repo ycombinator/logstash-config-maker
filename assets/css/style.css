@@ -1,5 +1,16 @@
+#header h2 {
+  float: left;
+}
+
+#header .glyphicon {
+  font-size: 1.25em;
+  padding-top: 1.5em;
+  padding-left: 0.5em;
+}
+
 #view #config {
   font-family: monospace;
+  font-size: 0.8em;
 }
 
 #view #config .plugin-type {
@@ -7,14 +18,13 @@
   display: none;
 }
 
-#view #config .plugin-list {
+#view #config ol,ul {
   margin-bottom: 0em;
   padding-left: 1em;
 }
 
-#view #config .plugin {
+#view #config li {
   list-style: none;
-
 }
 
 #view #config .plugin > a {
@@ -23,4 +33,8 @@
 
 #view #config .plugin:hover > a {
   visibility: visible;
+}
+
+#view #config label {
+  font-weight: normal;
 }
