@@ -3,8 +3,38 @@ var Config = function(pluginSet) {
   var self = this;
 
   var download = function() {
-    // TODO: code to produce downlad-able config
-    return false;
+    var configLines = [];
+    [ "input", "filter", "output" ].forEach(function(pluginType) {
+      var pluginListForTypeEl = $( "#config #" + pluginType + " ol");
+      var pluginList = pluginListForTypeEl.children();
+      if (pluginList.length > 0) {
+        configLines.push(pluginType + " {");
+        pluginList.each(function(pluginIndex, plugin) {
+          var pluginEl = $(plugin);
+          configLines.push("  " + pluginEl.attr("data-name") + " {");
+          pluginEl.find("ul li").each(function(attributeIndex, attribute) {
+            var attributeEl = $(attribute);
+            var attributeName  = attributeEl.children("label").text();
+            var attributeValue = attributeEl.children("input").val();
+            if (attributeValue) {
+              if (attributeEl.attr("data-type") === "string") {
+                attributeValue = '"' + attributeValue + '"';
+              }
+              configLines.push("    " + attributeName + " => " + attributeValue);
+            }
+          });
+          configLines.push("  }");
+        });
+        configLines.push("}");
+      }
+    });
+
+    var configFileBlob = new Blob([ configLines.join("\n") ], { type: 'text/plain' });
+    var configFileUrl = URL.createObjectURL(configFileBlob);
+
+    $( "#download-config" )
+      .attr("download", "logstash.conf")
+      .attr("href", configFileUrl)
   }
 
   self.renderBuildHtml = function() {
@@ -78,6 +108,7 @@ var Plugin = function(pluginDetails) {
 
         var attrEl = $("<li>")
           .append(labelEl)
+          .attr("data-type", attribute.dataType)
           .append(document.createTextNode(" => "))
           .append(inputEl)
           .tooltip({ title: attribute.description, placement: "bottom" })
@@ -92,6 +123,7 @@ var Plugin = function(pluginDetails) {
 
     var pluginEl = $("<li>")
       .addClass("plugin")
+      .attr("data-name", pluginDetails.name)
       .append(document.createTextNode(pluginDetails.name + " {\n"))
       .append(pluginAttributeListEl)
       .append(document.createTextNode("}\n"));
