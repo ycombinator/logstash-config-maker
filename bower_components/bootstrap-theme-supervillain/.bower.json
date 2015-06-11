@@ -1,0 +1,31 @@
+{
+  "name": "bootstrap-theme-supervillain",
+  "version": "0.0.3",
+  "author": "William Ghelfi",
+  "main": "dist/bootstrap.css",
+  "themestrap": {
+    "name": "Supervillain",
+    "repo": "https://github.com/trumbitta/bootstrap-theme-supervillain"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.0.0"
+  },
+  "homepage": "https://github.com/trumbitta/bootstrap-theme-supervillain",
+  "_release": "0.0.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.3",
+    "commit": "50b7c4e7abcb3c177123c5c11f5f688a444e69e8"
+  },
+  "_source": "git://github.com/trumbitta/bootstrap-theme-supervillain.git",
+  "_target": "~0.0.3",
+  "_originalSource": "bootstrap-theme-supervillain",
+  "_direct": true
+}
