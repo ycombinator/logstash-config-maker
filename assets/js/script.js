@@ -96,7 +96,8 @@ var Plugin = function(pluginDetails) {
       var attribute = pluginDetails.attributes[attributeName];
 
       if (!attribute.deprecated
-        && (attribute.required || !attribute.default)) {
+        && attribute.required
+        && !attribute.default) {
 
         var labelEl = $("<label>")
           .text(attributeName);
@@ -227,7 +228,8 @@ var PluginSet = function() {
         attributes[name] = {
           dataType: null,
           default: null,
-          description: comments.join("\n")
+          description: comments.join("\n"),
+          required: false
         };
         rest.split(",").forEach(function(item) {
           item = item.trim();
