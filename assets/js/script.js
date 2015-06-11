@@ -228,7 +228,8 @@ var PluginSet = function() {
         attributes[name] = {
           dataType: null,
           default: null,
-          description: comments.join("\n")
+          description: comments.join("\n"),
+          required: false
         };
         rest.split(",").forEach(function(item) {
           item = item.trim();
