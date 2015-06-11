@@ -96,7 +96,8 @@ var Plugin = function(pluginDetails) {
       var attribute = pluginDetails.attributes[attributeName];
 
       if (!attribute.deprecated
-        && (attribute.required || !attribute.default)) {
+        && attribute.required
+        && !attribute.default) {
 
         var labelEl = $("<label>")
           .text(attributeName);
